@@ -11,7 +11,6 @@ interface TeamHeaderProps {
 export const TeamHeader = ({ onColorChange }: TeamHeaderProps) => {
   const [logo, setLogo] = useState<string>("");
   const [teamName, setTeamName] = useState("");
-  const [opponent, setOpponent] = useState("");
   const [opponentRecord, setOpponentRecord] = useState("");
   const [gameDate, setGameDate] = useState("");
 
@@ -57,27 +56,15 @@ export const TeamHeader = ({ onColorChange }: TeamHeaderProps) => {
                 placeholder="Enter team name"
               />
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <Label htmlFor="opponent" className="text-white/90">Opponent</Label>
-                <Input
-                  id="opponent"
-                  value={opponent}
-                  onChange={(e) => setOpponent(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white"
-                  placeholder="Enter opponent"
-                />
-              </div>
-              <div>
-                <Label htmlFor="opponentRecord" className="text-white/90">Record</Label>
-                <Input
-                  id="opponentRecord"
-                  value={opponentRecord}
-                  onChange={(e) => setOpponentRecord(e.target.value)}
-                  className="bg-white/10 border-white/20 text-white"
-                  placeholder="0-0"
-                />
-              </div>
+            <div>
+              <Label htmlFor="opponentRecord" className="text-white/90">Record</Label>
+              <Input
+                id="opponentRecord"
+                value={opponentRecord}
+                onChange={(e) => setOpponentRecord(e.target.value)}
+                className="bg-white/10 border-white/20 text-white"
+                placeholder="0-0"
+              />
             </div>
           </div>
           
