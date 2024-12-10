@@ -2,7 +2,6 @@ import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
-import { saveAs } from "file-saver";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -90,6 +89,7 @@ export const DownloadButtons = () => {
         const sourceY = (i * element.offsetHeight / pagesNeeded);
         const sourceHeight = element.offsetHeight / pagesNeeded;
         
+        // Add image with correct clipping
         pdf.addImage(
           canvas,
           'PNG',
@@ -98,11 +98,7 @@ export const DownloadButtons = () => {
           scaledWidth,
           scaledHeight,
           undefined,
-          'FAST',
-          0,
-          sourceY / contentHeight,
-          1,
-          sourceHeight / contentHeight
+          'FAST'
         );
       }
       
