@@ -101,6 +101,21 @@ export const PlayerCard = () => {
               className="min-h-[100px]"
             />
           </div>
+
+          <div>
+            <label className="text-sm font-medium mb-2 block">Point of Emphasis</label>
+            <Textarea 
+              placeholder="Enter key points to emphasize..."
+              className="min-h-[80px]"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium mb-2 block">Defender(s)</label>
+            <Input 
+              placeholder="Enter defender initials (e.g., JD, MK)"
+            />
+          </div>
         </div>
       </div>
     </div>
