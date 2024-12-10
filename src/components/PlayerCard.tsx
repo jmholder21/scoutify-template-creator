@@ -2,16 +2,38 @@ import { UploadCloud } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 export const PlayerCard = () => {
   const [headshot, setHeadshot] = useState<string>("");
+  const { toast } = useToast();
   
   const handleHeadshotUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 5000000) { // 5MB limit
+        toast({
+          title: "Error",
+          description: "Image must be less than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setHeadshot(reader.result as string);
+        toast({
+          title: "Success",
+          description: "Image uploaded successfully",
+        });
+      };
+      reader.onerror = () => {
+        toast({
+          title: "Error",
+          description: "Failed to upload image",
+          variant: "destructive",
+        });
       };
       reader.readAsDataURL(file);
     }
