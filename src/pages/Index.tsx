@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { TeamHeader } from "@/components/TeamHeader";
+import { TeamStats } from "@/components/TeamStats";
 import { PlayerCard } from "@/components/PlayerCard";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 
 const Index = () => {
   const [primaryColor, setPrimaryColor] = useState("#8B1F41");
-  const [players, setPlayers] = useState([0]); // Array of player card indices
+  const [players, setPlayers] = useState([0]);
 
   const addPlayer = () => {
     setPlayers([...players, players.length]);
@@ -16,6 +17,7 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
         <TeamHeader onColorChange={setPrimaryColor} />
+        <TeamStats />
         
         <div className="space-y-6">
           {players.map((index) => (
