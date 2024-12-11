@@ -4,9 +4,16 @@ import { TeamStats } from "@/components/TeamStats";
 import { PlayerCard } from "@/components/PlayerCard";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { PlusCircle, Save, Upload } from "lucide-react";
+import { PlusCircle, Save, Upload, FileTemplate } from "lucide-react";
 import { DownloadButtons } from "@/components/DownloadButtons";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { reportTemplates, ReportTemplate } from "@/utils/reportTemplates";
 
 interface ReportData {
   primaryColor: string;
@@ -76,12 +83,45 @@ const Index = () => {
     reader.readAsText(file);
   };
 
+  const applyTemplate = (template: ReportTemplate) => {
+    setPrimaryColor(template.primaryColor);
+    setPlayers(Array.from({ length: template.playerCount }, (_, i) => i));
+    setOtherNotes("");
+    
+    toast({
+      title: "Template Applied",
+      description: `Applied ${template.name} template`,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
         <div className="flex gap-4 mb-8">
           <DownloadButtons />
           <div className="flex gap-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  <FileTemplate className="w-4 h-4 mr-2" />
+                  Templates
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {reportTemplates.map((template) => (
+                  <DropdownMenuItem
+                    key={template.name}
+                    onClick={() => applyTemplate(template)}
+                    className="flex flex-col items-start"
+                  >
+                    <span className="font-medium">{template.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {template.description}
+                    </span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button 
               onClick={handleSaveReport}
               variant="outline"
