@@ -4,7 +4,7 @@ import { TeamStats } from "@/components/TeamStats";
 import { PlayerCard } from "@/components/PlayerCard";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { PlusCircle, Save, Upload, FileTemplate } from "lucide-react";
+import { PlusCircle, Save, Upload, FileText } from "lucide-react";
 import { DownloadButtons } from "@/components/DownloadButtons";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -103,7 +103,7 @@ const Index = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
-                  <FileTemplate className="w-4 h-4 mr-2" />
+                  <FileText className="w-4 h-4 mr-2" />
                   Templates
                 </Button>
               </DropdownMenuTrigger>
