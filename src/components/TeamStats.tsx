@@ -16,7 +16,11 @@ interface Game {
   }[];
 }
 
-export const TeamStats = () => {
+interface TeamStatsProps {
+  previewMode?: boolean;
+}
+
+export const TeamStats = ({ previewMode = false }: TeamStatsProps) => {
   const [games, setGames] = useState<Game[]>(
     Array(5).fill({
       result: "W",
@@ -59,92 +63,111 @@ export const TeamStats = () => {
         <div className="space-y-8">
           {games.map((game, gameIndex) => (
             <div key={gameIndex} className="border-b pb-6 last:border-b-0">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center mb-4">
-                <div>
-                  <Label>Result</Label>
-                  <RadioGroup
-                    value={game.result}
-                    onValueChange={(value) => updateGame(gameIndex, "result", value)}
-                    className="flex space-x-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="W" id={`W-${gameIndex}`} />
-                      <Label htmlFor={`W-${gameIndex}`}>Win</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="L" id={`L-${gameIndex}`} />
-                      <Label htmlFor={`L-${gameIndex}`}>Loss</Label>
-                    </div>
-                  </RadioGroup>
+              {previewMode ? (
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center mb-4">
+                  <div className="font-semibold">{game.result}</div>
+                  <div>{game.opponent || 'No opponent'}</div>
+                  <div>{game.location}</div>
+                  <div>{game.score || 'No score'}</div>
                 </div>
-                
-                <div>
-                  <Label>Opponent</Label>
-                  <Input
-                    value={game.opponent}
-                    onChange={(e) => updateGame(gameIndex, "opponent", e.target.value)}
-                    placeholder="Opponent name"
-                  />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center mb-4">
+                  <div>
+                    <Label>Result</Label>
+                    <RadioGroup
+                      value={game.result}
+                      onValueChange={(value) => updateGame(gameIndex, "result", value)}
+                      className="flex space-x-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="W" id={`W-${gameIndex}`} />
+                        <Label htmlFor={`W-${gameIndex}`}>Win</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="L" id={`L-${gameIndex}`} />
+                        <Label htmlFor={`L-${gameIndex}`}>Loss</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  
+                  <div>
+                    <Label>Opponent</Label>
+                    <Input
+                      value={game.opponent}
+                      onChange={(e) => updateGame(gameIndex, "opponent", e.target.value)}
+                      placeholder="Opponent name"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label>Location</Label>
+                    <RadioGroup
+                      value={game.location}
+                      onValueChange={(value) => updateGame(gameIndex, "location", value)}
+                      className="flex space-x-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="Home" id={`Home-${gameIndex}`} />
+                        <Label htmlFor={`Home-${gameIndex}`}>Home</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="Away" id={`Away-${gameIndex}`} />
+                        <Label htmlFor={`Away-${gameIndex}`}>Away</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="Neutral" id={`Neutral-${gameIndex}`} />
+                        <Label htmlFor={`Neutral-${gameIndex}`}>Neutral</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  
+                  <div>
+                    <Label>Score</Label>
+                    <Input
+                      value={game.score}
+                      onChange={(e) => updateGame(gameIndex, "score", e.target.value)}
+                      placeholder="Score (e.g., 85-79)"
+                    />
+                  </div>
                 </div>
-                
-                <div>
-                  <Label>Location</Label>
-                  <RadioGroup
-                    value={game.location}
-                    onValueChange={(value) => updateGame(gameIndex, "location", value)}
-                    className="flex space-x-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Home" id={`Home-${gameIndex}`} />
-                      <Label htmlFor={`Home-${gameIndex}`}>Home</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Away" id={`Away-${gameIndex}`} />
-                      <Label htmlFor={`Away-${gameIndex}`}>Away</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Neutral" id={`Neutral-${gameIndex}`} />
-                      <Label htmlFor={`Neutral-${gameIndex}`}>Neutral</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-                
-                <div>
-                  <Label>Score</Label>
-                  <Input
-                    value={game.score}
-                    onChange={(e) => updateGame(gameIndex, "score", e.target.value)}
-                    placeholder="Score (e.g., 85-79)"
-                  />
-                </div>
-              </div>
+              )}
 
               <div className="mt-4">
                 <Label className="mb-2 block">Leading Scorers</Label>
                 <div className="space-y-2">
                   {game.leadingScorers.map((scorer, scorerIndex) => (
                     <div key={scorerIndex} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <Input
-                          value={scorer.lastName}
-                          onChange={(e) => updateScorer(gameIndex, scorerIndex, "lastName", e.target.value)}
-                          placeholder="Last name"
-                        />
-                      </div>
-                      <div>
-                        <Input
-                          value={scorer.number}
-                          onChange={(e) => updateScorer(gameIndex, scorerIndex, "number", e.target.value)}
-                          placeholder="#"
-                        />
-                      </div>
-                      <div>
-                        <Input
-                          value={scorer.stats}
-                          onChange={(e) => updateScorer(gameIndex, scorerIndex, "stats", e.target.value)}
-                          placeholder="Quick stats"
-                        />
-                      </div>
+                      {previewMode ? (
+                        <>
+                          <div>{scorer.lastName || 'N/A'}</div>
+                          <div>{scorer.number || 'N/A'}</div>
+                          <div>{scorer.stats || 'N/A'}</div>
+                        </>
+                      ) : (
+                        <>
+                          <div>
+                            <Input
+                              value={scorer.lastName}
+                              onChange={(e) => updateScorer(gameIndex, scorerIndex, "lastName", e.target.value)}
+                              placeholder="Last name"
+                            />
+                          </div>
+                          <div>
+                            <Input
+                              value={scorer.number}
+                              onChange={(e) => updateScorer(gameIndex, scorerIndex, "number", e.target.value)}
+                              placeholder="#"
+                            />
+                          </div>
+                          <div>
+                            <Input
+                              value={scorer.stats}
+                              onChange={(e) => updateScorer(gameIndex, scorerIndex, "stats", e.target.value)}
+                              placeholder="Quick stats"
+                            />
+                          </div>
+                        </>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -157,32 +180,50 @@ export const TeamStats = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <Label>Team Strengths</Label>
-          <Textarea
-            value={strengths}
-            onChange={(e) => setStrengths(e.target.value)}
-            placeholder="Enter team strengths..."
-            className="h-32"
-          />
+          {previewMode ? (
+            <div className="prose max-w-none mt-2">
+              <p className="whitespace-pre-wrap">{strengths || 'No team strengths listed'}</p>
+            </div>
+          ) : (
+            <Textarea
+              value={strengths}
+              onChange={(e) => setStrengths(e.target.value)}
+              placeholder="Enter team strengths..."
+              className="h-32"
+            />
+          )}
         </div>
         <div>
           <Label>Team Weaknesses</Label>
-          <Textarea
-            value={weaknesses}
-            onChange={(e) => setWeaknesses(e.target.value)}
-            placeholder="Enter team weaknesses..."
-            className="h-32"
-          />
+          {previewMode ? (
+            <div className="prose max-w-none mt-2">
+              <p className="whitespace-pre-wrap">{weaknesses || 'No team weaknesses listed'}</p>
+            </div>
+          ) : (
+            <Textarea
+              value={weaknesses}
+              onChange={(e) => setWeaknesses(e.target.value)}
+              placeholder="Enter team weaknesses..."
+              className="h-32"
+            />
+          )}
         </div>
       </div>
 
       <div>
         <Label>Keys to Victory</Label>
-        <Textarea
-          value={keysToVictory}
-          onChange={(e) => setKeysToVictory(e.target.value)}
-          placeholder="Enter keys to victory..."
-          className="h-32"
-        />
+        {previewMode ? (
+          <div className="prose max-w-none mt-2">
+            <p className="whitespace-pre-wrap">{keysToVictory || 'No keys to victory listed'}</p>
+          </div>
+        ) : (
+          <Textarea
+            value={keysToVictory}
+            onChange={(e) => setKeysToVictory(e.target.value)}
+            placeholder="Enter keys to victory..."
+            className="h-32"
+          />
+        )}
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { TeamStats } from "@/components/TeamStats";
 import { PlayerCard } from "@/components/PlayerCard";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { PlusCircle, Save, Upload } from "lucide-react";
+import { PlusCircle, Save, Upload, Eye, EyeOff } from "lucide-react";
 import { DownloadButtons } from "@/components/DownloadButtons";
 import { useToast } from "@/hooks/use-toast";
 
@@ -18,6 +18,7 @@ const Index = () => {
   const [primaryColor, setPrimaryColor] = useState("#8B1F41");
   const [players, setPlayers] = useState([0]);
   const [otherNotes, setOtherNotes] = useState("");
+  const [isPreview, setIsPreview] = useState(false);
   const { toast } = useToast();
 
   const addPlayer = () => {
@@ -79,9 +80,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
-        <div className="flex gap-4 mb-8">
-          <DownloadButtons />
-          <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4 mb-8 items-center justify-between">
+          <div className="flex flex-wrap gap-4">
+            <DownloadButtons />
             <Button 
               onClick={handleSaveReport}
               variant="outline"
@@ -108,35 +109,64 @@ const Index = () => {
               />
             </label>
           </div>
+          <Button
+            onClick={() => setIsPreview(!isPreview)}
+            variant="outline"
+            className="ml-auto"
+          >
+            {isPreview ? (
+              <>
+                <EyeOff className="w-4 h-4 mr-2" />
+                Edit Mode
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4 mr-2" />
+                Preview Mode
+              </>
+            )}
+          </Button>
         </div>
         
         <div id="scout-report" className="space-y-8">
-          <TeamHeader onColorChange={setPrimaryColor} />
-          <TeamStats />
+          <TeamHeader onColorChange={setPrimaryColor} previewMode={isPreview} />
+          <TeamStats previewMode={isPreview} />
           
           <div className="space-y-6">
             {players.map((index) => (
-              <PlayerCard key={index} />
+              <PlayerCard key={index} previewMode={isPreview} />
             ))}
           </div>
           
-          <Button 
-            onClick={addPlayer}
-            className="mt-6 w-full"
-            variant="outline"
-          >
-            <PlusCircle className="w-4 h-4 mr-2" />
-            Add Player
-          </Button>
+          {!isPreview && (
+            <Button 
+              onClick={addPlayer}
+              className="mt-6 w-full"
+              variant="outline"
+            >
+              <PlusCircle className="w-4 h-4 mr-2" />
+              Add Player
+            </Button>
+          )}
 
           <div className="mt-8">
             <h3 className="text-lg font-semibold mb-2 text-primary">Other Notes</h3>
-            <Textarea
-              value={otherNotes}
-              onChange={(e) => setOtherNotes(e.target.value)}
-              placeholder="Enter additional notes about the team, game plan, or specific strategies..."
-              className="min-h-[200px]"
-            />
+            {isPreview ? (
+              <div className="prose max-w-none">
+                {otherNotes ? (
+                  <p className="whitespace-pre-wrap">{otherNotes}</p>
+                ) : (
+                  <p className="text-gray-500 italic">No additional notes</p>
+                )}
+              </div>
+            ) : (
+              <Textarea
+                value={otherNotes}
+                onChange={(e) => setOtherNotes(e.target.value)}
+                placeholder="Enter additional notes about the team, game plan, or specific strategies..."
+                className="min-h-[200px]"
+              />
+            )}
           </div>
         </div>
       </div>
