@@ -44,19 +44,21 @@ export const PlayerCard = () => {
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex-shrink-0">
           <div className="w-32 h-40 relative mb-4">
-            {headshot ? (
-              <img src={headshot} alt="Player headshot" className="w-full h-full object-cover rounded-lg" />
-            ) : (
-              <div className="w-full h-full border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
-                <UploadCloud className="w-8 h-8 text-gray-400" />
-              </div>
-            )}
-            <Input
-              type="file"
-              onChange={handleHeadshotUpload}
-              className="absolute inset-0 opacity-0 cursor-pointer"
-              accept="image/*"
-            />
+            <label className="block w-full h-full cursor-pointer">
+              {headshot ? (
+                <img src={headshot} alt="Player headshot" className="w-full h-full object-cover rounded-lg" />
+              ) : (
+                <div className="w-full h-full border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+                  <UploadCloud className="w-8 h-8 text-gray-400" />
+                </div>
+              )}
+              <Input
+                type="file"
+                onChange={handleHeadshotUpload}
+                className="hidden"
+                accept="image/*"
+              />
+            </label>
           </div>
         </div>
 
